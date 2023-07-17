@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 require dirname(__DIR__) . "/vendor/autoload.php";
 
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+$dotenv->load();
+
 
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
@@ -19,6 +22,17 @@ if ($resource != "estates") {
 
 }
 
+$database = new Database(
+    $_ENV['DB_HOST'],
+    $_ENV['DB_NAME'],
+    $_ENV['DB_USER'],
+    $_ENV['DB_PASS'],
+    $options ?? null
+);
+
+$cn = $database->getConnection();
+
+var_dump($cn);
 
 $controller = new EstateController();
 
