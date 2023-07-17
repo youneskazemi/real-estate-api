@@ -32,7 +32,6 @@ $database = new Database(
 
 $cn = $database->getConnection();
 
-var_dump($cn);
 
 $controller = new EstateController();
 
