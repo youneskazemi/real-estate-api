@@ -51,6 +51,4 @@ require __DIR__."/tokens.php";
 
 $refresh_token_gateway = new RefreshTokenGateway($database, $_ENV["SECRET_KEY"]);
 
-$token ="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsImVtYWlsIjoic2Fka25pZ2h0NzhAZ21haWwuY29tIiwicm9sZSI6MSwiZXhwIjoxNjkwMTI1Mzg0fQ.btIogBxXQSkKH4IXHvQJciCxFvk_kyD5s3jW1wvP130";
-
 $refresh_token_gateway->create($refresh_token, $refresh_token_expiry);
