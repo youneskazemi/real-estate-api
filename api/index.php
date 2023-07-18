@@ -1,25 +1,16 @@
 <?php
 
-declare(strict_types=1);
 
-require dirname(__DIR__) . "/vendor/autoload.php";
-set_error_handler("ErrorHandler::handleError");
-set_exception_handler("ErrorHandler::handleException");
-
-
-$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
-$dotenv->load();
-
+require __DIR__."/bootstrap.php";
 
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
 $parts = explode("/", $path);
 
-$resource = $parts[4];
+$resource = $parts[3];
+$id = $parts[4] ?? null;
 
-$id = $parts[5] ?? null;
-
-if ($resource != "estates") {
+if ($resource != "ads") {
     http_response_code(404);
     exit();
 
@@ -34,7 +25,22 @@ $database = new Database(
 );
 
 
-$estate_gateway = new EstateGateway($database);
-$controller = new EstateController($estate_gateway);
+if ($resource === "ads") {
 
-$controller->processRequest($method, $id);
+    $ads_gateway = new AdsGateway($database);
+    $controller = new AdsController($ads_gateway);
+
+    $controller->processRequest($method, $id);
+}
+
+elseif ($resource === "login") {
+
+    require __DIR__."/login.php";
+}
+
+else  {
+
+    http_response_code(404);
+    exit();
+
+}

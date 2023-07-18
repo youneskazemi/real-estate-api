@@ -6,6 +6,7 @@
     },
     "require": {
         "vlucas/phpdotenv": "^5.3",
-        "izniburak/pdox": "^1.6"
+        "izniburak/pdox": "^1.6",
+        "firebase/php-jwt": "^6.8"
     }
 }
