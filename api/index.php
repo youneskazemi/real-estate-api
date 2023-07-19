@@ -24,11 +24,26 @@ $database = new Database(
     $options ?? null
 );
 
+if ($_SERVER['REQUEST_METHOD'] !== "GET"){
+    $user_gateway = new UserGateway($database);
+
+    $codec = new JWTCodec($_ENV["SECRET_KEY"]);
+
+    $auth = new Auth($user_gateway, $codec);
+
+    if ( ! $auth->authenticateAccessToken()) {
+        exit;
+    }
+
+    $user_role = $auth->getUserRole();
+}
+
+
 
 if ($resource === "ads") {
 
     $ads_gateway = new AdsGateway($database);
-    $controller = new AdsController($ads_gateway);
+    $controller = new AdsController($ads_gateway,$user_role ?? null);
 
     $controller->processRequest($method, $id);
 }

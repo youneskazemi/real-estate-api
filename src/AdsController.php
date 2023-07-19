@@ -6,7 +6,7 @@ class AdsController
 {
 
 
-    public function __construct(private AdsGateway $gateway)
+    public function __construct(private AdsGateway $gateway, private ?int $user_role)
     {
 
     }
@@ -23,9 +23,11 @@ class AdsController
             } elseif ($method == "POST") {
 
 
-                // if (!in_array($role_id,[2,3])){
+                if (!in_array($this->user_role,array(1,2))){
+                    $this->respondUnauthorized();
+                    return;
                     
-                // }
+                }
 
                 $data = (array) json_decode(file_get_contents('php://input'), true);
 
@@ -61,12 +63,22 @@ class AdsController
                     break;
 
                 case "PATCH":
+                    if (!in_array($this->user_role,array(1,2))){
+                        $this->respondUnauthorized();
+                        return;
+                        
+                    }
                     $data = (array) json_decode(file_get_contents('php://input'), true);
                     $rows = $this->gateway->updateAd($id, $data);
                     echo json_encode(["message" => "Estate updated", "rows" => $rows]);
                     break;
 
                 case "DELETE":
+                    if (!in_array($this->user_role,array(1,2))){
+                        $this->respondUnauthorized();
+                        return;
+                        
+                    }
                     $rows = $this->gateway->deleteAd($id);
                     echo json_encode(["message" => "Estate deleted", "rows" => $rows]);
                     break;
@@ -83,6 +95,11 @@ class AdsController
     {
         http_response_code(405);
         header('Allow: ' . $allowedMethods);
+    }
+
+    private function respondUnauthorized() : void {
+        http_response_code(401);
+        echo json_encode(["message" => "Unauthorized"]);
     }
 
     private function respondCreated(string $id): void
