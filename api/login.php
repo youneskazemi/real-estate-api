@@ -37,7 +37,7 @@ if (empty($user)){
     exit;
 }
 
-if (hash("MD5",$data["password"]) !== $user["password"]) {
+if (hash_hmac("sha256",$data["password"],$_ENV["SECRET_KEY"]) !== $user["password"]) {
 
     http_response_code(401);
     echo json_encode(["message" => "invalid authentication"]);

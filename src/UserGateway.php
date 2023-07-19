@@ -22,6 +22,14 @@ class UserGateway
 
     }
 
+    public function create(array $data) : int {
+
+        $data["role_id"] = 3; 
+        $data["password"] = hash_hmac("sha256", $data["password"],$_ENV["SECRET_KEY"]);
+        return $this->conn->table("users")->insert($data);
+
+    }
+
 
 
 }

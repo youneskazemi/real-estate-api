@@ -22,6 +22,11 @@ class AdsController
 
             } elseif ($method == "POST") {
 
+
+                // if (!in_array($role_id,[2,3])){
+                    
+                // }
+
                 $data = (array) json_decode(file_get_contents('php://input'), true);
 
                 $errors = $this->getValidationErrors($data);
