@@ -34,16 +34,18 @@ if ($_SERVER['REQUEST_METHOD'] !== "GET"){
     if ( ! $auth->authenticateAccessToken()) {
         exit;
     }
-
     $user_role = $auth->getUserRole();
+
 }
+
+$authorization = new Authorization($user_role ?? 0);
 
 
 
 if ($resource === "ads") {
 
     $ads_gateway = new AdsGateway($database);
-    $controller = new AdsController($ads_gateway,$user_role ?? null);
+    $controller = new AdsController($ads_gateway,$authorization);
 
     $controller->processRequest($method, $id);
 }
